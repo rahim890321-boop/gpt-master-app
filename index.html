@@ -3,24 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT Master App</title>
+    <title>GPT Master - Earning Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #0d1b2a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(27, 38, 59, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        body { background: #0b132b; color: #e0e1dd; font-family: sans-serif; }
+        .glass { background: rgba(28, 37, 65, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-glow:hover { box-shadow: 0 0 15px #3a86ff; }
     </style>
 </head>
-<body class="p-4">
-    <div class="max-w-md mx-auto glass p-6 rounded-2xl mt-10 text-center">
-        <h1 class="text-2xl font-bold text-cyan-400">GPT MASTER</h1>
-        <p class="text-gray-400 text-sm mt-2">Welcome to your earning portal</p>
-        
-        <div class="mt-8 p-4 bg-black/30 rounded-xl">
-            <p class="text-xs uppercase text-gray-500">Your Balance (30%)</p>
-            <p class="text-4xl font-bold text-white mt-1">0.00 <span class="text-sm">BDT</span></p>
-        </div>
+<body class="p-4 min-h-screen flex flex-col items-center">
 
-        <button class="w-full bg-cyan-600 mt-6 py-3 rounded-xl font-bold">Start Earning</button>
+    <div class="w-full max-w-md glass p-6 rounded-3xl text-center mb-6">
+        <h1 class="text-3xl font-bold text-cyan-400 tracking-tighter">GPT MASTER</h1>
+        <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Premium Earning Portal</p>
+        
+        <div class="mt-8 grid grid-cols-1 gap-4">
+            <div class="bg-black/30 p-5 rounded-2xl border border-cyan-500/20">
+                <p class="text-[10px] uppercase text-gray-500 font-bold">Your Balance (30%)</p>
+                <p class="text-4xl font-bold text-white mt-1"><span id="user-balance">0.00</span> <span class="text-sm text-cyan-500 font-mono">BDT</span></p>
+            </div>
+        </div>
     </div>
+
+    <div class="w-full max-w-md glass p-6 rounded-3xl mb-6">
+        <h3 class="font-bold mb-4 text-cyan-400 flex items-center gap-2">
+            <span class="w-1 h-4 bg-cyan-500 rounded-full"></span> Active Tasks
+        </h3>
+        
+        <div class="space-y-4">
+            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
+                <div>
+                    <h4 class="text-sm font-bold">YouTube Subscribe</h4>
+                    <p class="text-[10px] text-gray-400">Reward: 5.00 BDT</p>
+                </div>
+                <button onclick="doTask(5.00)" class="bg-cyan-600 text-white text-xs px-4 py-2 rounded-lg font-bold btn-glow">Start</button>
+            </div>
+            
+            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
+                <div>
+                    <h4 class="text-sm font-bold">Website Visit</h4>
+                    <p class="text-[10px] text-gray-400">Reward: 2.00 BDT</p>
+                </div>
+                <button onclick="doTask(2.00)" class="bg-cyan-600 text-white text-xs px-4 py-2 rounded-lg font-bold btn-glow">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // আপনার লাভ (৭০%) এবং ইউজারের লাভ (৩০%) লজিক
+        let balance = parseFloat(localStorage.getItem('gpt_balance')) || 0;
+        document.getElementById('user-balance').innerText = balance.toFixed(2);
+
+        function doTask(reward) {
+            alert("Task Started! Wait 10 seconds...");
+            setTimeout(() => {
+                let userProfit = reward * 0.30; // ইউজার পাবে ৩০%
+                balance += userProfit;
+                localStorage.setItem('gpt_balance', balance);
+                document.getElementById('user-balance').innerText = balance.toFixed(2);
+                
+                // আপনার লাভ (৭০%) আপনার মনের ভেতর জমা থাকল (বা অ্যাডমিন প্যানেলে যাবে)
+                let masterProfit = reward * 0.70;
+                alert("Task Success! " + userProfit.toFixed(2) + " BDT added to your balance.");
+            }, 10000);
+        }
+    </script>
 </body>
-</html>
+        </html>
