@@ -3,70 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT Master - Earning Portal</title>
+    <title>GPT Master - Admin Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #0b132b; color: #e0e1dd; font-family: sans-serif; }
         .glass { background: rgba(28, 37, 65, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-glow:hover { box-shadow: 0 0 15px #3a86ff; }
+        .glow { text-shadow: 0 0 10px #3a86ff; }
     </style>
 </head>
 <body class="p-4 min-h-screen flex flex-col items-center">
 
-    <div class="w-full max-w-md glass p-6 rounded-3xl text-center mb-6">
-        <h1 class="text-3xl font-bold text-cyan-400 tracking-tighter">GPT MASTER</h1>
-        <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Premium Earning Portal</p>
+    <div class="w-full max-w-md glass p-6 rounded-3xl text-center mb-6 border-t-2 border-cyan-500">
+        <h1 class="text-3xl font-bold text-cyan-400 glow">GPT MASTER</h1>
         
-        <div class="mt-8 grid grid-cols-1 gap-4">
-            <div class="bg-black/30 p-5 rounded-2xl border border-cyan-500/20">
-                <p class="text-[10px] uppercase text-gray-500 font-bold">Your Balance (30%)</p>
-                <p class="text-4xl font-bold text-white mt-1"><span id="user-balance">0.00</span> <span class="text-sm text-cyan-500 font-mono">BDT</span></p>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+            <div class="bg-black/30 p-3 rounded-2xl border border-white/5">
+                <p class="text-[9px] uppercase text-gray-500">User Balance (30%)</p>
+                <p class="text-xl font-bold text-white"><span id="user-balance">0.00</span> <span class="text-[10px]">BDT</span></p>
+            </div>
+            <div class="bg-cyan-900/20 p-3 rounded-2xl border border-cyan-500/20">
+                <p class="text-[9px] uppercase text-cyan-500 font-bold">Master Profit (70%)</p>
+                <p class="text-xl font-bold text-cyan-400"><span id="master-profit">0.00</span> <span class="text-[10px]">BDT</span></p>
             </div>
         </div>
     </div>
 
     <div class="w-full max-w-md glass p-6 rounded-3xl mb-6">
-        <h3 class="font-bold mb-4 text-cyan-400 flex items-center gap-2">
-            <span class="w-1 h-4 bg-cyan-500 rounded-full"></span> Active Tasks
-        </h3>
-        
-        <div class="space-y-4">
-            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
-                <div>
-                    <h4 class="text-sm font-bold">YouTube Subscribe</h4>
-                    <p class="text-[10px] text-gray-400">Reward: 5.00 BDT</p>
-                </div>
-                <button onclick="doTask(5.00)" class="bg-cyan-600 text-white text-xs px-4 py-2 rounded-lg font-bold btn-glow">Start</button>
-            </div>
-            
-            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
-                <div>
-                    <h4 class="text-sm font-bold">Website Visit</h4>
-                    <p class="text-[10px] text-gray-400">Reward: 2.00 BDT</p>
-                </div>
-                <button onclick="doTask(2.00)" class="bg-cyan-600 text-white text-xs px-4 py-2 rounded-lg font-bold btn-glow">Start</button>
+        <h3 class="font-bold mb-4 text-sm uppercase tracking-widest text-gray-400">Task Center</h3>
+        <div class="space-y-3">
+            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                <p class="text-sm font-bold">YouTube Task</p>
+                <button onclick="doTask(10.00)" class="bg-cyan-600 text-xs px-4 py-2 rounded-lg font-bold">Get 3.00 BDT</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // আপনার লাভ (৭০%) এবং ইউজারের লাভ (৩০%) লজিক
-        let balance = parseFloat(localStorage.getItem('gpt_balance')) || 0;
-        document.getElementById('user-balance').innerText = balance.toFixed(2);
+    <div class="w-full max-w-md glass p-6 rounded-3xl">
+        <h3 class="font-bold mb-4 text-sm uppercase tracking-widest text-gray-400">Withdraw Funds</h3>
+        <input id="wallet-number" type="text" placeholder="bKash/Nagad Number" class="w-full bg-black/30 p-3 rounded-xl mb-3 outline-none border border-white/10 text-sm">
+        <input id="withdraw-amount" type="number" placeholder="Min 100 BDT" class="w-full bg-black/30 p-3 rounded-xl mb-4 outline-none border border-white/10 text-sm">
+        <button onclick="requestWithdraw()" class="w-full bg-white text-black py-3 rounded-xl font-bold hover:bg-cyan-400 transition">Submit Request</button>
+    </div>
 
-        function doTask(reward) {
-            alert("Task Started! Wait 10 seconds...");
+    <script>
+        let balance = parseFloat(localStorage.getItem('user_bal')) || 0;
+        let masterProfit = parseFloat(localStorage.getItem('master_pro')) || 0;
+
+        updateUI();
+
+        function updateUI() {
+            document.getElementById('user-balance').innerText = balance.toFixed(2);
+            document.getElementById('master-profit').innerText = masterProfit.toFixed(2);
+        }
+
+        function doTask(totalReward) {
+            alert("Task running... wait 10s");
             setTimeout(() => {
-                let userProfit = reward * 0.30; // ইউজার পাবে ৩০%
-                balance += userProfit;
-                localStorage.setItem('gpt_balance', balance);
-                document.getElementById('user-balance').innerText = balance.toFixed(2);
-                
-                // আপনার লাভ (৭০%) আপনার মনের ভেতর জমা থাকল (বা অ্যাডমিন প্যানেলে যাবে)
-                let masterProfit = reward * 0.70;
-                alert("Task Success! " + userProfit.toFixed(2) + " BDT added to your balance.");
+                balance += totalReward * 0.30;
+                masterProfit += totalReward * 0.70;
+                saveData();
+                updateUI();
+                alert("Success! Check your balance.");
             }, 10000);
+        }
+
+        function requestWithdraw() {
+            const amount = document.getElementById('withdraw-amount').value;
+            const num = document.getElementById('wallet-number').value;
+            if(amount >= 100 && balance >= amount) {
+                alert("Withdraw Request Sent for " + amount + " BDT to " + num + ". Wait for Admin Approval.");
+                balance -= amount;
+                saveData();
+                updateUI();
+            } else {
+                alert("Insufficient Balance or Minimum 100 BDT required.");
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('user_bal', balance);
+            localStorage.setItem('master_pro', masterProfit);
         }
     </script>
 </body>
-        </html>
+                                                               </html>
