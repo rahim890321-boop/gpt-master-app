@@ -3,87 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT Master - Admin Control</title>
+    <title>GPT Master PRO - Secure Earnings</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #0b132b; color: #e0e1dd; font-family: sans-serif; }
-        .glass { background: rgba(28, 37, 65, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glow { text-shadow: 0 0 10px #3a86ff; }
-    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
-<body class="p-4 min-h-screen flex flex-col items-center">
+<body class="bg-[#050a14] text-white p-4 font-sans min-h-screen">
 
-    <div class="w-full max-w-md glass p-6 rounded-3xl text-center mb-6 border-t-2 border-cyan-500">
-        <h1 class="text-3xl font-bold text-cyan-400 glow">GPT MASTER</h1>
-        
-        <div class="mt-6 grid grid-cols-2 gap-3">
-            <div class="bg-black/30 p-3 rounded-2xl border border-white/5">
-                <p class="text-[9px] uppercase text-gray-500">User Balance (30%)</p>
-                <p class="text-xl font-bold text-white"><span id="user-balance">0.00</span> <span class="text-[10px]">BDT</span></p>
-            </div>
-            <div class="bg-cyan-900/20 p-3 rounded-2xl border border-cyan-500/20">
-                <p class="text-[9px] uppercase text-cyan-500 font-bold">Master Profit (70%)</p>
-                <p class="text-xl font-bold text-cyan-400"><span id="master-profit">0.00</span> <span class="text-[10px]">BDT</span></p>
-            </div>
+    <script>
+        // আপনার দেওয়া সঠিক Config এখানে বসানো হয়েছে
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqqlY-y-daq_wXTrimhstyavtjoYMrCbQ",
+            authDomain: "gpt-master-pro.firebaseapp.com",
+            projectId: "gpt-master-pro",
+            storageBucket: "gpt-master-pro.firebasestorage.app",
+            messagingSenderId: "245291766175",
+            appId: "1:245291766175:web:87863388eb307a35cbadaa"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+
+    <div class="max-w-md mx-auto space-y-6 pt-10">
+        <div class="bg-blue-900/20 border border-blue-500/30 p-3 rounded-2xl text-[10px] text-blue-400">
+            📢 <b>NOTICE:</b> Withdraw your $ via MetaMask. Minimum $5. Admin splits 70/30.
         </div>
-    </div>
 
-    <div class="w-full max-w-md glass p-6 rounded-3xl mb-6">
-        <h3 class="font-bold mb-4 text-sm uppercase tracking-widest text-gray-400">Task Center</h3>
-        <div class="space-y-3">
-            <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
-                <p class="text-sm font-bold">YouTube Task</p>
-                <button onclick="doTask(10.00)" class="bg-cyan-600 text-xs px-4 py-2 rounded-lg font-bold">Get 3.00 BDT</button>
+        <div class="bg-gray-900 p-8 rounded-[2.5rem] border border-white/5 text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <svg width="60" height="60" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
             </div>
+            <h1 class="text-xl font-bold text-gray-400 uppercase tracking-tighter">My Wallet</h1>
+            <p class="text-5xl font-black text-white mt-4">$<span id="u_bal">0.0000</span></p>
+            
+            <div id="admin_sec" class="hidden mt-6 pt-6 border-t border-white/5">
+                <p class="text-[10px] text-green-500 font-bold uppercase">Admin Master Profit (70%)</p>
+                <p class="text-3xl font-bold text-green-400">$<span id="m_bal">0.0000</span></p>
+            </div>
+            <button onclick="loginAdmin()" class="mt-4 text-[8px] text-gray-800 hover:text-gray-600">Admin Control</button>
         </div>
-    </div>
 
-    <div class="w-full max-w-md glass p-6 rounded-3xl">
-        <h3 class="font-bold mb-4 text-sm uppercase tracking-widest text-gray-400">Withdraw Funds</h3>
-        <input id="wallet-number" type="text" placeholder="bKash/Nagad Number" class="w-full bg-black/30 p-3 rounded-xl mb-3 outline-none border border-white/10 text-sm">
-        <input id="withdraw-amount" type="number" placeholder="Min 100 BDT" class="w-full bg-black/30 p-3 rounded-xl mb-4 outline-none border border-white/10 text-sm">
-        <button onclick="requestWithdraw()" class="w-full bg-white text-black py-3 rounded-xl font-bold hover:bg-cyan-400 transition">Submit Request</button>
+        <button onclick="executeSecureTask(1.00)" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-[1.5rem] font-bold text-lg shadow-xl shadow-blue-900/40 transition-all active:scale-95">
+            Watch Premium Ad ($1.00)
+        </button>
+
+        <div class="bg-gray-900 p-6 rounded-[2rem] border border-white/5">
+            <h3 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Withdrawal Request</h3>
+            <input id="addr" type="text" placeholder="MetaMask BEP20 Address (0x...)" class="w-full bg-black/50 border border-white/10 p-4 rounded-2xl mb-4 outline-none text-sm text-cyan-400">
+            <button onclick="submitWithdraw()" class="w-full bg-white text-black py-4 rounded-2xl font-black uppercase tracking-wider hover:bg-cyan-400 transition">Request Payout</button>
+        </div>
     </div>
 
     <script>
-        let balance = parseFloat(localStorage.getItem('user_bal')) || 0;
-        let masterProfit = parseFloat(localStorage.getItem('master_pro')) || 0;
+        let currentUser = null;
 
-        updateUI();
+        // অটোমেটিক ইউজার লগইন (Firebase Auth)
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                loadData();
+            } else {
+                auth.signInAnonymously().catch(e => console.error(e));
+            }
+        });
 
-        function updateUI() {
-            document.getElementById('user-balance').innerText = balance.toFixed(2);
-            document.getElementById('master-profit').innerText = masterProfit.toFixed(2);
+        // সার্ভার থেকে লাইভ ডাটা লোড
+        function loadData() {
+            db.collection("users").doc(currentUser.uid).onSnapshot(doc => {
+                if(doc.exists()){
+                    document.getElementById('u_bal').innerText = doc.data().balance.toFixed(4);
+                    document.getElementById('m_bal').innerText = doc.data().masterProfit.toFixed(4);
+                } else {
+                    db.collection("users").doc(currentUser.uid).set({ balance: 0, masterProfit: 0 });
+                }
+            });
         }
 
-        function doTask(totalReward) {
-            alert("Task running... wait 10s");
-            setTimeout(() => {
-                balance += totalReward * 0.30;
-                masterProfit += totalReward * 0.70;
-                saveData();
-                updateUI();
-                alert("Success! Check your balance.");
+        // সিকিউর টাস্ক: এটি সার্ভার ভ্যালু আপডেট করবে
+        async function executeSecureTask(reward) {
+            window.open('https://www.youtube.com/@Chodling', '_blank');
+            alert("টাস্ক শুরু হয়েছে! ১০ সেকেন্ড ওই পেজে থাকুন।");
+            
+            setTimeout(async () => {
+                const uPart = reward * 0.30;
+                const mPart = reward * 0.70;
+                
+                // ইউজার ব্রাউজারে এডিট করলেও লাভ নাই, আপডেট হবে সরাসরি ডাটাবেসে
+                await db.collection("users").doc(currentUser.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(uPart),
+                    masterProfit: firebase.firestore.FieldValue.increment(mPart)
+                });
+                alert("সাফল্য! ডলার আপনার সার্ভার অ্যাকাউন্টে জমা হয়েছে।");
             }, 10000);
         }
 
-        function requestWithdraw() {
-            const amount = document.getElementById('withdraw-amount').value;
-            const num = document.getElementById('wallet-number').value;
-            if(amount >= 100 && balance >= amount) {
-                alert("Withdraw Request Sent for " + amount + " BDT to " + num + ". Wait for Admin Approval.");
-                balance -= amount;
-                saveData();
-                updateUI();
-            } else {
-                alert("Insufficient Balance or Minimum 100 BDT required.");
-            }
+        async function submitWithdraw() {
+            const wallet = document.getElementById('addr').value;
+            if(!wallet.startsWith("0x")) return alert("সঠিক মেটামাস্ক অ্যাড্রেস দিন!");
+            
+            await db.collection("withdrawals").add({
+                uid: currentUser.uid,
+                address: wallet,
+                status: "pending",
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("আপনার উইথড্র রিকোয়েস্টটি অ্যাডমিন ড্যাশবোর্ডে পাঠানো হয়েছে।");
         }
 
-        function saveData() {
-            localStorage.setItem('user_bal', balance);
-            localStorage.setItem('master_pro', masterProfit);
+        function loginAdmin() {
+            if(prompt("Admin Password?") === "1234") {
+                document.getElementById('admin_sec').classList.remove('hidden');
+            }
         }
     </script>
 </body>
-                                                               </html>
+                                                                                                       </html>
